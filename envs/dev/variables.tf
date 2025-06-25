@@ -53,3 +53,8 @@ variable "capacity_providers" {
   description = "Lista de proveedores de capacidad para el cluster ECS"
   type        = list(string)
 }
+variable "aws_profile" {
+  description = "El perfil de AWS a utilizar"
+  type        = string
+  default     = "default"
+}

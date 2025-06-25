@@ -12,13 +12,13 @@ resource "aws_ecs_cluster_capacity_providers" "cluster_capacity_providers" {
   capacity_providers = var.capacity_providers
 
     default_capacity_provider_strategy {
-        capacity_provider = var.default_capacity_provider
+        capacity_provider = ["FARGATE"]
         base = 3
         weight            = 1
     }
 
     default_capacity_provider_strategy {
-        capacity_provider = var.default_capacity_provider_2
+        capacity_provider = ["FARGATE_SPOT"]
         base = 0
         weight            = 1
     }
