@@ -8,6 +8,5 @@ output "redis_parameter_group_name" {
   value = aws_elasticache_parameter_group.default.name
 }
 output "url_redis" {
-  value = aws_elasticache_cluster.aws_redis.configuration_endpoint[0].address
-  
+  value = aws_elasticache_cluster.aws_redis.cache_nodes[0].address
 }
