@@ -2,7 +2,7 @@ resource "aws_db_instance" "persistant_database" {
   allocated_storage       = 20
   backup_retention_period = 1
   engine                  = "postgres"
-  engine_version          = "9.6.22"
+  engine_version          = "17.5"
   identifier              = "postgres-db-${var.environment}"
   instance_class          = "db.t3.small"
   multi_az                = false

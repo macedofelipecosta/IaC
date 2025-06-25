@@ -1,7 +1,7 @@
 resource "aws_alb" "alb_vote" {
   name            = "vote-alb"
   internal        = false
-  subnets         = [for s in var.private_subnets_id : s]
+  subnets         = [for s in var.public_subnets_id : s]
   idle_timeout    = 4000
   security_groups = [var.app_sg_id]
 }
@@ -9,14 +9,14 @@ resource "aws_alb" "alb_vote" {
 resource "aws_alb" "alb_result" {
   name            = "result-alb"
   internal        = false
-  subnets         = [for s in var.private_subnets_id : s]
+  subnets         = [for s in var.public_subnets_id : s]
   idle_timeout    = 4000
   security_groups = [var.app_sg_id]
 }
 
 resource "aws_alb_target_group" "alb_vote_tg" {
   name        = "vote-tg"
-  port        = "5000"
+  port        = "80"
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
@@ -43,7 +43,7 @@ resource "aws_alb_listener" "alb_vote_listener" {
 
 resource "aws_alb_target_group" "alb_result_tg" {
   name        = "result-tg"
-  port        = "5001"
+  port        = "80"
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"

@@ -17,9 +17,9 @@ azs             = ["us-east-1a", "us-east-1b"]
 cluster_name   = "votingApp-cluster-dev"
 
 #Imagenes de contenedor
-vote_image = "233749785955.dkr.ecr.us-east-1.amazonaws.com/result:latest"
-result_image = "233749785955.dkr.ecr.us-east-1.amazonaws.com/vote:latest"
-worker_image = "233749785955.dkr.ecr.us-east-1.amazonaws.com/worker:latest"
+vote_image = "fmacedocosta/vote-app:latest"
+result_image = "fmacedocosta/result-app:latest"
+worker_image = "fmacedocosta/worker-app:latest"
 
 capacity_providers = [ "FARGATE", "FARGATE_SPOT" ]
 

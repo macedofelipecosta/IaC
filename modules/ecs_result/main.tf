@@ -32,7 +32,7 @@ resource "aws_ecs_service" "ecs_service_result" {
   load_balancer {
     target_group_arn = var.target_group_arn_result
     container_name   = "result_app"
-    container_port   = "5001"
+    container_port   = "80"
   }
 }
 
@@ -64,8 +64,9 @@ resource "aws_ecs_task_definition" "task_def_result" {
         }
       },
       "portMappings" : [{
-        "containerPort" : 5001,
-        "hostPort" : 5001
+        "containerPort" : 80,
+        "hostPort" : 80,
+        "protocol" : "tcp"
         },
         {
           "containerPort" : 5858,

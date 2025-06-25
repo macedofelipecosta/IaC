@@ -31,6 +31,7 @@ module "load_balancer" {
   source             = "../../modules/load_balancer"
   vpc_id             = module.network.vpc_id
   private_subnets_id = module.network.private_subnet_ids
+  public_subnets_id  = module.network.public_subnet_ids
   app_sg_id          = module.security.app_sg
 }
 

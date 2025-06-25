@@ -32,7 +32,7 @@ resource "aws_ecs_service" "ecs_service_vote" {
   load_balancer {
     target_group_arn = var.target_group_arn_vote
     container_name   = "vote_app"
-    container_port   = "5000"
+    container_port   = "80"
   }
 }
 
@@ -65,8 +65,9 @@ resource "aws_ecs_task_definition" "task_def_vote" {
           }
         },
         "portMappings" : [{
-          "containerPort" : 5000,
-          "hostPort" : 5000
+          "containerPort" : 80,
+          "hostPort" : 80,
+          "protocol" : "tcp"
         }]
       }
   ])

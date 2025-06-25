@@ -1,10 +1,10 @@
 output "alb_vote_dns"{
     description = "Devuelve la direccion url por donde se accede a la app vote"
-    value= aws_alb.alb_vote.name
+    value= aws_alb.alb_vote.dns_name
 }
 output "alb_result_dns" {
   description = "Devuelve la direccion url por donde se accede a la app result"
-  value = aws_alb.alb_result.name
+  value = aws_alb.alb_result.dns_name
 }
 
 output "target_group_arn_vote" {
