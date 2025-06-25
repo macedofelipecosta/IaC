@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "task_def_worker" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
-  container_definitions = jsondecode([
+  container_definitions = jsonencode([
     {
       "name" : "worker_app",
       "image" : var.worker_image,
