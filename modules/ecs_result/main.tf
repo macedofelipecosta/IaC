@@ -1,6 +1,6 @@
-resource "aws_cloudwatch_log_group" "this"{
-    name = "/ecs/result"
-    retention_in_days = 3
+resource "aws_cloudwatch_log_group" "this" {
+  name              = "/ecs/result"
+  retention_in_days = 3
 }
 
 resource "aws_ecs_service" "ecs_service_result" {
@@ -44,5 +44,33 @@ resource "aws_ecs_task_definition" "task_def_result" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
-  container_definitions    = data.template_file.task_def_result_template.rendered
+  container_definitions = jsonencode([
+    {
+      "name" : "result_app",
+      "image" : var.result_image,
+      "cpu" : "256",
+      "memory" : "512",
+      "networkMode" : "awsvpc",
+      "interactive" : true,
+      "pseudoTerminal" : true,
+      "mountPoints" : [],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "secretOptions" : null,
+        "options" : {
+          "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
+          "awslogs-region" : "us-east-1",
+          "awslogs-stream-prefix" : "result"
+        }
+      },
+      "portMappings" : [{
+        "containerPort" : 5001,
+        "hostPort" : 5001
+        },
+        {
+          "containerPort" : 5858,
+          "hostPort" : 5858
+      }]
+    }
+  ])
 }

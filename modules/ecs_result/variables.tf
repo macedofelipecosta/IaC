@@ -34,3 +34,7 @@ variable "region" {
   type        = string
   default     = "us-east-1"
 }
+variable "result_image" {
+  description = "URL de la imagen Docker result"
+  type        = string
+}
