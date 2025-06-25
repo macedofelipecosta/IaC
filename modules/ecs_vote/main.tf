@@ -49,8 +49,8 @@ resource "aws_ecs_task_definition" "task_def_vote" {
       {
         "name" : "vote_app",
         "image" : var.vote_image,
-        "cpu" : "256",
-        "memory" : "512",
+        "cpu" : 256,
+        "memory" : 512,
         "networkMode" : "awsvpc",
         "interactive" : true,
         "pseudoTerminal" : true,

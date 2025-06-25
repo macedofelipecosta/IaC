@@ -3,7 +3,7 @@ resource "aws_db_instance" "persistant_database" {
   backup_retention_period = 1
   engine                  = "postgres"
   engine_version          = "9.6.22"
-  identifier              = "voting_app-postgres_db-${var.environment}"
+  identifier              = "postgres-db-${var.environment}"
   instance_class          = "db.t3.small"
   multi_az                = false
   db_name                 = "postgres"

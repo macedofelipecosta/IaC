@@ -48,8 +48,8 @@ resource "aws_ecs_task_definition" "task_def_result" {
     {
       "name" : "result_app",
       "image" : var.result_image,
-      "cpu" : "256",
-      "memory" : "512",
+      "cpu" : 256,
+      "memory" : 512,
       "networkMode" : "awsvpc",
       "interactive" : true,
       "pseudoTerminal" : true,

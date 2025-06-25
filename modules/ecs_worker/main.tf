@@ -42,8 +42,8 @@ resource "aws_ecs_task_definition" "task_def_worker" {
     {
       "name" : "worker_app",
       "image" : var.worker_image,
-      "cpu" : "256",
-      "memory" : "512",
+      "cpu" : 256,
+      "memory" : 512,
       "networkMode" : "awsvpc",
       "interactive" : true,
       "pseudoTerminal" : true,
