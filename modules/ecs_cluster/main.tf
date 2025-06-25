@@ -6,7 +6,7 @@ resource "aws_ecs_cluster" "vote_cluster" {
   }  
 }
 
-resource aws_ecs_cluster_capacity_providers "cluster_capacity_providers" {
+resource "aws_ecs_cluster_capacity_providers" "cluster_capacity_providers" {
   cluster_name = aws_ecs_cluster.vote_cluster.name
   
   capacity_providers = var.capacity_providers
