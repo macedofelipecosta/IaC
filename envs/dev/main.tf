@@ -40,7 +40,7 @@ module "ecs_vote" {
   private_subnet_ids    = module.network.private_subnet_ids
   cluster_id            = module.cluster.cluster_id
   app_sg                = module.security.app_sg
-  target_group_arn_vote = [module.load_balancer.target_group_arn_vote]
+  target_group_arn_vote = module.load_balancer.target_group_arn_vote
   vote_image            = var.vote_image
   role_arn              = data.aws_iam_role.labrole.arn
 }
@@ -51,7 +51,7 @@ module "ecs_result" {
   private_subnets_id      = module.network.private_subnet_ids
   app_sg                  = module.security.app_sg
   cluster_id              = module.cluster.cluster_id
-  target_group_arn_result = [module.load_balancer.target_group_arn_result]
+  target_group_arn_result = module.load_balancer.target_group_arn_result
   result_image            = var.result_image
   role_arn                = data.aws_iam_role.labrole.arn
 }
