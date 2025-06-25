@@ -76,6 +76,6 @@ module "redis" {
 module "postgres" {
   source             = "../../modules/postgres"
   environment        = var.environment
-  databases_sg       = module.network.databases_sg
+  databases_sg       = module.security.databases_sg
   private_subnet_ids = module.network.private_subnet_ids
 }
