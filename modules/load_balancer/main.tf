@@ -9,7 +9,7 @@ resource "aws_alb" "alb_vote" {
 resource "aws_alb" "alb_result" {
   name            = "alb_result"
   internal        = false
-  subnets         = [for s in data.aws_subnets.default_subnets.ids : s]
+  subnets         = [for s in var.private_subnets_id : s]
   idle_timeout    = 4000
   security_groups = [var.app_sg_id]
 }
