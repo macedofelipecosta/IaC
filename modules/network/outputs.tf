@@ -21,7 +21,7 @@ output "aws_internetgateway_id" {
 }
 
 output "aws_eip_id" {
-  value = aws_eip.nat_eip.id
+  value = [for eip in aws_eip.nat_eip : eip.id]
 }
 
 output "aws_route_table_public_id" {
