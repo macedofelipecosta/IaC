@@ -1,4 +1,4 @@
-resource "aes_cloudwatch_log_group" "this" {
+resource "aws_cloudwatch_log_group" "this" {
   name              = "/ecs/vote"
   retention_in_days = 3
 }
@@ -59,7 +59,7 @@ resource "aws_ecs_task_definition" "task_def_vote" {
           "logDriver" : "awslogs",
           "secretOptions" : null,
           "options" : {
-            "awslogs-group" : "${aes_cloudwatch_log_group.this.name}",
+            "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
             "awslogs-region" : "us-east-1",
             "awslogs-stream-prefix" : "vote"
           }
