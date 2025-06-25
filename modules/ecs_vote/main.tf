@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "task_def_vote" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
-  container_definitions = jsondecode(
+  container_definitions = jsonencode(
     [
       {
         "name" : "vote_app",
