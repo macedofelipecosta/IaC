@@ -46,7 +46,7 @@ resource "aws_security_group" "databases_sg" {
       from_port       = ingress.value
       to_port         = element(local.db_ports, index(local.db_ports, ingress.value))
       protocol        = "tcp"
-      security_groups = [aws_security_group.main_sg.id]
+      security_groups = [aws_security_group.app_sg.id]
     }
   }
 
