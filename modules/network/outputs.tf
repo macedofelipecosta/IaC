@@ -13,7 +13,7 @@ output "private_subnet_ids"{
 }
 
 output "aws_natgateway_id"{
-  value=aws_nat_gateway.nat_gateway.id
+  value=aws_nat_gateway.nat_gw.id
 }
 
 output "aws_internetgateway_id"{
