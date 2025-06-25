@@ -17,7 +17,7 @@ output "aws_natgateway_id"{
 }
 
 output "aws_internetgateway_id"{
-  value=aws_internet_gateway.internet_gateway.id
+  value=aws_internet_gateway.igw.id
 }
 
 output "aws_eip_id"{
