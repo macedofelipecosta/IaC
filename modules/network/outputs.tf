@@ -28,5 +28,6 @@ output "aws_route_table_public_id" {
   value = aws_route_table.public_route_table.id
 }
 output "aws_route_table_private_id" {
-  value = aws_route_table.private_route_table.id
+  value = [for rt in aws_route_table.private_route_table : rt.id]
+
 }
