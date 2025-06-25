@@ -37,7 +37,7 @@ resource "aws_security_group" "app_sg" {
 resource "aws_security_group" "databases_sg" {
   name        = "${var.environment}-db_sg"
   description = "Se utiliza un sg para ambas db con los puertos 6379 y 5432"
-  vpc_id      = data.aws_vpc.default_vpc.id
+  vpc_id      = var.vpc_id
 
   dynamic "ingress" {
     for_each = local.db_ports
