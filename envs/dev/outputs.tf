@@ -1,14 +1,9 @@
 
-output "alb_dns_result" {
+output "alb_dns" {
   description = "DNS del Application Load Balancer"
-  value       = module.load_balancer.alb_result_dns
+  value       = module.load_balancer.alb_app_dns
 }
 
-output "alb_dns_vote" {
-  description = "DNS del Application Load Balancer"
-  value       = module.load_balancer.alb_vote_dns
-  
-}
 
 output "alb_target_group_arn_vote" {
   description = "ARN del Target Group vote asociado al ALB"

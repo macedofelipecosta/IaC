@@ -28,16 +28,3 @@ variable "region" {
   type        = string
   default     = "us-east-1"
 }
-variable "db_endpoint" {
-  description = "Endpoint de la base de datos"
-  type        = string
-}
-variable "redis_endpoint" {
-  description = "Endpoint de Redis"
-  type        = string
-}
-variable "service_discovery_arn" {
-  description = "ARN del servicio de descubrimiento"
-  type        = string
-  
-}

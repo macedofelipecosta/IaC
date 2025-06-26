@@ -33,11 +33,3 @@ variable "region" {
   default     = "us-east-1"
 }
 
-variable "url_elasticache_redis" {
-  description = "URL del servicio de Redis en ElastiCache"
-  type        = string
-}
-variable "service_discovery_arn" {
-  description = "ARN del servicio de descubrimiento"
-  type        = string
-}

@@ -1,5 +1,5 @@
-module "role"{
-  source = "../../modules/iam"
+module "role" {
+  source      = "../../modules/iam"
   environment = var.environment
 }
 
@@ -37,11 +37,11 @@ module "load_balancer" {
 }
 
 module "cloudmap" {
-  source             = "../../modules/cloudmap"
-  environment        = var.environment
-  vpc_id             = module.network.vpc_id
-  namespace_name     = var.namespace_name
-  
+  source         = "../../modules/cloudmap"
+  environment    = var.environment
+  vpc_id         = module.network.vpc_id
+  namespace_name = var.namespace_name
+
 }
 
 module "ecs_vote" {
@@ -53,8 +53,6 @@ module "ecs_vote" {
   target_group_arn_vote = module.load_balancer.target_group_arn_vote
   vote_image            = var.vote_image
   role_arn              = module.role.execution_role_arn
-  url_elasticache_redis = module.redis.url_redis
-  service_discovery_arn = module.cloudmap.redis_service_id
 }
 
 module "ecs_result" {
@@ -66,8 +64,7 @@ module "ecs_result" {
   target_group_arn_result = module.load_balancer.target_group_arn_result
   result_image            = var.result_image
   role_arn                = module.role.execution_role_arn
-  url_postgres = module.postgres.url_postgres
-  service_discovery_arn   = module.cloudmap.result_service_id
+
 }
 
 module "ecs_worker" {
@@ -78,9 +75,8 @@ module "ecs_worker" {
   cluster_id         = module.cluster.cluster_id
   worker_image       = var.worker_image
   role_arn           = module.role.execution_role_arn
-  db_endpoint        = module.postgres.url_postgres
-  redis_endpoint     = module.redis.url_redis
-  service_discovery_arn = module.cloudmap.worker_service_id
+
+
 }
 
 module "redis" {
@@ -89,10 +85,10 @@ module "redis" {
   subnet_ids         = module.network.private_subnet_ids
   security_group_id  = module.security.databases_sg
   redis_image        = var.redis_image
-  cluster_arn       = module.cluster.cluster_id
+  cluster_arn        = module.cluster.cluster_id
   execution_role_arn = module.role.execution_role_arn
-  task_role_arn = module.role.execution_role_arn
-  redis_service_arn = module.cloudmap.redis_service_id
+  task_role_arn      = module.role.execution_role_arn
+  redis_service_arn  = module.cloudmap.redis_service_id
 
 }
 
@@ -105,6 +101,5 @@ module "postgres" {
   cluster_arn        = module.cluster.cluster_id
   execution_role_arn = module.role.execution_role_arn
   task_role_arn      = module.role.execution_role_arn
-  db_service_arn = module.cloudmap.result_service_id
-
+  db_service_arn     = module.cloudmap.db_service_id
 }
