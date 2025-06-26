@@ -53,6 +53,8 @@ module "ecs_vote" {
   target_group_arn_vote = module.load_balancer.target_group_arn_vote
   vote_image            = var.vote_image
   role_arn              = module.role.execution_role_arn
+  aws_region            = var.aws_region
+  depends_on            = [module.load_balancer.aws_listener_http, module.load_balancer.target_group_arn_vote]
 }
 
 module "ecs_result" {
@@ -64,7 +66,8 @@ module "ecs_result" {
   target_group_arn_result = module.load_balancer.target_group_arn_result
   result_image            = var.result_image
   role_arn                = module.role.execution_role_arn
-
+  aws_region              = var.aws_region
+  depends_on              = [module.load_balancer.aws_listener_http, module.load_balancer.target_group_arn_result]
 }
 
 module "ecs_worker" {
@@ -75,8 +78,7 @@ module "ecs_worker" {
   cluster_id         = module.cluster.cluster_id
   worker_image       = var.worker_image
   role_arn           = module.role.execution_role_arn
-
-
+  aws_region         = var.aws_region
 }
 
 module "redis" {
@@ -89,7 +91,7 @@ module "redis" {
   execution_role_arn = module.role.execution_role_arn
   task_role_arn      = module.role.execution_role_arn
   redis_service_arn  = module.cloudmap.redis_service_id
-
+  region             = var.aws_region
 }
 
 module "postgres" {
@@ -102,4 +104,5 @@ module "postgres" {
   execution_role_arn = module.role.execution_role_arn
   task_role_arn      = module.role.execution_role_arn
   db_service_arn     = module.cloudmap.db_service_id
+  region             = var.aws_region
 }

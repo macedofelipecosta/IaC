@@ -32,4 +32,9 @@ variable "region" {
   type        = string
   default     = "us-east-1"
 }
+variable "aws_region" {
+  description = "AWS region for logging"
+  type        = string
+  default     = "us-east-1"
+}
 

@@ -59,35 +59,35 @@ resource "aws_ecs_task_definition" "task_def_result" {
       "interactive" : true,
       "pseudoTerminal" : true,
       "mountPoints" : [],
-      "environment" : [
-        {
-          "name" : "DB_HOST",
-          "value" : "db"
-        },
-        {
-          "name" : "DB_PORT",
-          "value" : "5432"
-        },
-        {
-          # amazonq-ignore-next-line
-          "name" : "DB_USER",
-          "value" : "votingapp_admin"
-        },
-        {
-          "name" : "DB_PASSWORD",
-          "value" : "password"
-        },
-        {
-          "name" : "DB_NAME",
-          "value" : "postgres"
-        }
-      ],
+      # "environment" : [
+      #   {
+      #     "name" : "DB_HOST",
+      #     "value" : "db.votingapp.local"
+      #   },
+      #   {
+      #     "name" : "DB_PORT",
+      #     "value" : "5432"
+      #   },
+      #   {
+      #     # amazonq-ignore-next-line
+      #     "name" : "DB_USER",
+      #     "value" : "postgres"
+      #   },
+      #   {
+      #     "name" : "DB_PASSWORD",
+      #     "value" : "postgres"
+      #   },
+      #   {
+      #     "name" : "DB_NAME",
+      #     "value" : "postgres"
+      #   }
+      # ],
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "secretOptions" : null,
         "options" : {
           "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
-          "awslogs-region" : "us-east-1",
+          "awslogs-region" : var.aws_region,
           "awslogs-stream-prefix" : "result"
         }
       },

@@ -60,22 +60,22 @@ resource "aws_ecs_task_definition" "task_def_vote" {
           "hostPort" : 80,
           "protocol" : "tcp"
         }],
-        "environment" : [
-          {
-            "name" : "REDIS_HOST",
-            "value" : "redis"
-          },
-          {
-            "name" : "REDIS_PORT",
-            "value" : "6379"
-          }
-        ],
+        # "environment" : [
+        #   {
+        #     "name" : "REDIS_HOST",
+        #     "value" : "redis.votingapp.local"
+        #   },
+        #   {
+        #     "name" : "REDIS_PORT",
+        #     "value" : "6379"
+        #   }
+        # ],
         "logConfiguration" : {
           "logDriver" : "awslogs",
           "secretOptions" : null,
           "options" : {
             "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
-            "awslogs-region" : "us-east-1",
+            "awslogs-region" : var.aws_region,
             "awslogs-stream-prefix" : "vote"
           }
         }

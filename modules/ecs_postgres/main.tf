@@ -1,4 +1,9 @@
 
+resource "aws_cloudwatch_log_group" "db" {
+  name              = "/ecs/db"
+  retention_in_days = 3
+}
+
 resource "aws_ecs_task_definition" "postgres" {
   family                   = "postgres-${var.environment}"
   network_mode             = "awsvpc"
@@ -10,17 +15,26 @@ resource "aws_ecs_task_definition" "postgres" {
 
   container_definitions = jsonencode([
     {
-      name      = "db"
-      image     = var.postgres_image
+      name  = "db"
+      image = var.postgres_image
       portMappings = [{
         containerPort = 5432
         protocol      = "tcp"
       }]
       environment = [
-        { name = "POSTGRES_USER", value = "votingapp_admin" },
-        { name = "POSTGRES_PASSWORD", value = "password" },
+        { name = "POSTGRES_USER", value = "postgres" },
+        { name = "POSTGRES_PASSWORD", value = "postgres" },
         { name = "POSTGRES_DB", value = "postgres" }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/db"
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "db"
+        }
+      }
+
     }
   ])
 }
@@ -34,14 +48,14 @@ resource "aws_ecs_service" "postgres" {
   task_definition = aws_ecs_task_definition.postgres.arn
 
   network_configuration {
-    subnets         = var.subnet_ids
-    security_groups = [var.security_group_id]
+    subnets          = var.subnet_ids
+    security_groups  = [var.security_group_id]
     assign_public_ip = false
   }
 
   service_registries {
     registry_arn   = var.db_service_arn
     container_name = "db"
-    container_port = 5432
+    #container_port = 5432
   }
 }

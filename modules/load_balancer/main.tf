@@ -25,7 +25,7 @@ resource "aws_alb_target_group" "alb_vote_tg" {
 }
 
 resource "aws_alb_listener" "http_listener" {
-  load_balancer_arn = aws_alb.app_alb.id
+  load_balancer_arn = aws_alb.app_alb.arn
   port              = 80
   protocol          = "HTTP"
   default_action {
@@ -66,7 +66,7 @@ resource "aws_alb_listener_rule" "vote_rule" {
 
   condition {
     path_pattern {
-      values = ["/vote*"]
+      values = ["/"]
     }
   }
 }

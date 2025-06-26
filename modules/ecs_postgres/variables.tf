@@ -7,3 +7,4 @@ variable "execution_role_arn" {}
 variable "task_role_arn" {}
 variable "postgres_image" {}
 variable "db_service_arn" {}
+variable "region"{}

@@ -38,3 +38,8 @@ variable "result_image" {
   description = "URL de la imagen Docker result"
   type        = string
 }
+variable "aws_region" {
+  description = "AWS region for logging"
+  type        = string
+  default     = "us-east-1"
+}

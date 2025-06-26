@@ -3,9 +3,9 @@ output "namespace_id" {
 }
 
 output "redis_service_id" {
-  value = aws_service_discovery_service.redis.id
+  value = aws_service_discovery_service.redis.arn
 }
 
 output "db_service_id" {
-  value = aws_service_discovery_service.db.id
+  value = aws_service_discovery_service.db.arn
 }

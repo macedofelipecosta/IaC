@@ -47,47 +47,48 @@ resource "aws_ecs_task_definition" "task_def_worker" {
       "interactive" : true,
       "pseudoTerminal" : true,
       "mountPoints" : [],
-      environment = [
-        {
-          name  = "DB_HOST"
-          value = "db"
-        },
-        {
-          name  = "DB_PORT"
-          value = "5432"
-        },
-        {
-          name  = "DB_USER"
-          value = "votingapp_admin"
-        },
-        {
-          # amazonq-ignore-next-line
-          name  = "DB_PASSWORD"
-          value = "password"
-        },
-        {
-          name  = "DB_NAME"
-          value = "postgres"
-        },
-        {
-          name  = "REDIS_HOST"
-          value = "redis"
-        },
-        {
-          name  = "REDIS_PORT"
-          value = "6379"
-        },
-        {
-          name  = "AWS_REGION"
-          value = "us-east-1"
-        }
-      ]
+      # environment = [
+      #   {
+      #     name  = "DB_HOST"
+      #     value = "db.votingapp.local"
+      #   },
+      #   {
+      #     name  = "DB_PORT"
+      #     value = "5432"
+      #   },
+      #   {
+      #     name  = "DB_USER"
+      #     value = "postgres"
+      #   },
+      #   {
+      #     # amazonq-ignore-next-line
+      #     name  = "DB_PASSWORD"
+      #     value = "postgres"
+      #   },
+      #   {
+      #     name  = "DB_NAME"
+      #     value = "postgres"
+      #   },
+      #   {
+      #     name  = "REDIS_HOST"
+      #     value = "redis.votingapp.local"
+      #   },
+      #   {
+      #     name  = "REDIS_PORT"
+      #     value = "6379"
+      #   },
+      #   {
+      #     name  = "AWS_REGION"
+      #     value = "us-east-1"
+      #   }
+      # ]
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "secretOptions" : null,
         "options" : {
           "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
           "awslogs-stream-prefix" : "worker"
+          "awslogs-region" : var.aws_region
         }
       }
     }
