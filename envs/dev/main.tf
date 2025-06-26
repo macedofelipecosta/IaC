@@ -44,6 +44,7 @@ module "ecs_vote" {
   target_group_arn_vote = module.load_balancer.target_group_arn_vote
   vote_image            = var.vote_image
   role_arn              = data.aws_iam_role.labrole.arn
+  url_elasticache_redis = module.redis.url_redis
 }
 
 module "ecs_result" {
@@ -55,6 +56,7 @@ module "ecs_result" {
   target_group_arn_result = module.load_balancer.target_group_arn_result
   result_image            = var.result_image
   role_arn                = data.aws_iam_role.labrole.arn
+  url_postgres = module.postgres.url_postgres
 }
 
 module "ecs_worker" {
@@ -65,6 +67,8 @@ module "ecs_worker" {
   cluster_id         = module.cluster.cluster_id
   worker_image       = var.worker_image
   role_arn           = data.aws_iam_role.labrole.arn
+  db_endpoint        = module.postgres.url_postgres
+  redis_endpoint     = module.redis.url_redis
 }
 
 module "redis" {

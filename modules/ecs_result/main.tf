@@ -34,6 +34,10 @@ resource "aws_ecs_service" "ecs_service_result" {
     container_name   = "result_app"
     container_port   = "80"
   }
+  tags = {
+    Name        = "ecs_service_result"
+    environment = var.environment
+  }
 }
 
 resource "aws_ecs_task_definition" "task_def_result" {
@@ -54,6 +58,29 @@ resource "aws_ecs_task_definition" "task_def_result" {
       "interactive" : true,
       "pseudoTerminal" : true,
       "mountPoints" : [],
+      "environment" : [
+        {
+          "name" : "DB_HOST",
+          "value" : var.url_postgres
+        },
+        {
+          "name" : "DB_PORT",
+          "value" : "5432"
+        },
+        {
+          "name" : "DB_USER",
+          "value" : "votingapp_admin"
+        },
+        {
+          "name" : "DB_PASSWORD",
+          "value" : "password"
+        },
+        {
+          "name" : "DB_NAME",
+          "value" : "postgres"
+        }
+      ],
+
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "secretOptions" : null,

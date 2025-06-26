@@ -16,6 +16,7 @@ resource "aws_db_instance" "persistant_database" {
   vpc_security_group_ids  = [var.databases_sg]
   db_subnet_group_name    = aws_db_subnet_group.subnet_db.name
   skip_final_snapshot     = true
+  parameter_group_name    = aws_db_parameter_group.postgres_no_ssl.name
 }
 
 resource "aws_db_subnet_group" "subnet_db" {
@@ -24,5 +25,20 @@ resource "aws_db_subnet_group" "subnet_db" {
   tags = {
     Name        = "db_subnet_group-${var.environment}"
     environment = var.environment
+  }
+}
+
+resource "aws_db_parameter_group" "postgres_no_ssl" {
+  name        = "${var.environment}-postgres-no-ssl"
+  family      = "postgres17"
+  description = "Disable SSL for Postgres RDS ${var.environment}"
+
+  parameter {
+    name  = "rds.force_ssl"
+    value = "0"
+  }
+
+  tags = {
+    Environment = var.environment
   }
 }

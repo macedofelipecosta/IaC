@@ -48,6 +48,41 @@ resource "aws_ecs_task_definition" "task_def_worker" {
       "interactive" : true,
       "pseudoTerminal" : true,
       "mountPoints" : [],
+      environment = [
+        {
+          name  = "DB_HOST"
+          value = var.db_endpoint
+        },
+        {
+          name  = "DB_PORT"
+          value = "5432"
+        },
+        {
+          name  = "DB_USER"
+          value = "votingapp_admin"
+        },
+        {
+          name  = "DB_PASSWORD"
+          value = "password"
+        },
+        {
+          name  = "DB_NAME"
+          value = "postgres"
+        },
+        {
+          name  = "REDIS_HOST"
+          value = var.redis_endpoint
+        },
+        {
+          name  = "REDIS_PORT"
+          value = "6379"
+        },
+        {
+          name  = "AWS_REGION"
+          value = "us-east-1"
+        }
+      ]
+
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "secretOptions" : null,

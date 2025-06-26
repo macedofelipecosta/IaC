@@ -1,5 +1,5 @@
 output "url_postgres" {
-  value = aws_db_instance.persistant_database.endpoint
+  value = aws_db_instance.persistant_database.address
 }
 output "username_postgres" {
   value = aws_db_instance.persistant_database.username

@@ -38,3 +38,7 @@ variable "result_image" {
   description = "URL de la imagen Docker result"
   type        = string
 }
+variable "url_postgres" {
+  description = "URL del servicio de Postgres"
+  type        = string
+}

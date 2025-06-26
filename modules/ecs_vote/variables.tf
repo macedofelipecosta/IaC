@@ -31,5 +31,9 @@ variable "region" {
   description = "AWS region"
   type        = string
   default     = "us-east-1"
-  
+}
+
+variable "url_elasticache_redis" {
+  description = "URL del servicio de Redis en ElastiCache"
+  type        = string
 }

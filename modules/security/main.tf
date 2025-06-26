@@ -59,7 +59,7 @@ resource "aws_security_group" "databases_sg" {
   }
 
   tags = {
-    Name= "${var.environment}-app_sg"
+    Name= "${var.environment}-db_sg"
     environment = var.environment
   }
 }

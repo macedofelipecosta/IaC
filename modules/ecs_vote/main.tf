@@ -69,6 +69,17 @@ resource "aws_ecs_task_definition" "task_def_vote" {
           "hostPort" : 80,
           "protocol" : "tcp"
         }]
+        "environment" : [
+          {
+            "name" : "REDIS_HOST",
+            "value" : "${var.url_elasticache_redis}"
+          },
+          {
+            "name" : "REDIS_PORT",
+            "value" : "6379"
+          }
+        ]
+
       }
   ])
 }
