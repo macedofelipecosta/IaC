@@ -4,7 +4,7 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 resource "aws_ecs_service" "ecs_service_vote" {
-  name                   = "ecs_service_vote"
+  name                   = "vote"
   task_definition        = aws_ecs_task_definition.task_def_vote.arn
   cluster                = var.cluster_id
   desired_count          = 1
@@ -26,7 +26,7 @@ resource "aws_ecs_service" "ecs_service_vote" {
   network_configuration {
     subnets          = [for s in var.private_subnet_ids : s]
     security_groups  = [var.app_sg]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   load_balancer {
@@ -34,6 +34,7 @@ resource "aws_ecs_service" "ecs_service_vote" {
     container_name   = "vote_app"
     container_port   = "80"
   }
+
 }
 
 resource "aws_ecs_task_definition" "task_def_vote" {
@@ -51,10 +52,24 @@ resource "aws_ecs_task_definition" "task_def_vote" {
         "image" : var.vote_image,
         "cpu" : 256,
         "memory" : 512,
-        "networkMode" : "awsvpc",
         "interactive" : true,
         "pseudoTerminal" : true,
         "mountPoints" : [],
+        "portMappings" : [{
+          "containerPort" : 80,
+          "hostPort" : 80,
+          "protocol" : "tcp"
+        }],
+        "environment" : [
+          {
+            "name" : "REDIS_HOST",
+            "value" : "redis"
+          },
+          {
+            "name" : "REDIS_PORT",
+            "value" : "6379"
+          }
+        ],
         "logConfiguration" : {
           "logDriver" : "awslogs",
           "secretOptions" : null,
@@ -63,23 +78,7 @@ resource "aws_ecs_task_definition" "task_def_vote" {
             "awslogs-region" : "us-east-1",
             "awslogs-stream-prefix" : "vote"
           }
-        },
-        "portMappings" : [{
-          "containerPort" : 80,
-          "hostPort" : 80,
-          "protocol" : "tcp"
-        }]
-        "environment" : [
-          {
-            "name" : "REDIS_HOST",
-            "value" : "${var.url_elasticache_redis}"
-          },
-          {
-            "name" : "REDIS_PORT",
-            "value" : "6379"
-          }
-        ]
-
+        }
       }
   ])
 }

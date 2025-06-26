@@ -4,7 +4,7 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 resource "aws_ecs_service" "ecs_service_result" {
-  name                   = "ecs_service_result"
+  name                   = "result"
   task_definition        = aws_ecs_task_definition.task_def_result.arn
   cluster                = var.cluster_id
   desired_count          = 1
@@ -26,7 +26,7 @@ resource "aws_ecs_service" "ecs_service_result" {
   network_configuration {
     subnets          = [for s in var.private_subnets_id : s]
     security_groups  = [var.app_sg]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   load_balancer {
@@ -50,6 +50,7 @@ resource "aws_ecs_task_definition" "task_def_result" {
   memory                   = "512"
   container_definitions = jsonencode([
     {
+      # amazonq-ignore-next-line
       "name" : "result_app",
       "image" : var.result_image,
       "cpu" : 256,
@@ -61,13 +62,14 @@ resource "aws_ecs_task_definition" "task_def_result" {
       "environment" : [
         {
           "name" : "DB_HOST",
-          "value" : var.url_postgres
+          "value" : "db"
         },
         {
           "name" : "DB_PORT",
           "value" : "5432"
         },
         {
+          # amazonq-ignore-next-line
           "name" : "DB_USER",
           "value" : "votingapp_admin"
         },
@@ -80,7 +82,6 @@ resource "aws_ecs_task_definition" "task_def_result" {
           "value" : "postgres"
         }
       ],
-
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "secretOptions" : null,

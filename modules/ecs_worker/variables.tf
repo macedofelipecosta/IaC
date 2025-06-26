@@ -36,3 +36,8 @@ variable "redis_endpoint" {
   description = "Endpoint de Redis"
   type        = string
 }
+variable "service_discovery_arn" {
+  description = "ARN del servicio de descubrimiento"
+  type        = string
+  
+}

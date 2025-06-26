@@ -42,3 +42,7 @@ variable "url_postgres" {
   description = "URL del servicio de Postgres"
   type        = string
 }
+variable "service_discovery_arn" {
+  description = "ARN del servicio de descubrimiento"
+  type        = string
+}

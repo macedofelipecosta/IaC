@@ -18,8 +18,6 @@ resource "aws_service_discovery_service" "redis" {
     routing_policy = "MULTIVALUE"
   }
 
-  health_check_custom_config {}
-
   tags = {
     environment = var.environment
   }
@@ -38,11 +36,6 @@ resource "aws_service_discovery_service" "db" {
 
     routing_policy = "MULTIVALUE"
   }
-
-  health_check_custom_config {
-    failure_threshold = 1
-  }
-
   tags = {
     environment = var.environment
   }

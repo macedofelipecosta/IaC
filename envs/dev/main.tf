@@ -1,5 +1,6 @@
-data "aws_iam_role" "labrole" {
-  name = "LabRole"
+module "role"{
+  source = "../../modules/iam"
+  environment = var.environment
 }
 
 module "cluster" {
@@ -35,6 +36,14 @@ module "load_balancer" {
   app_sg_id          = module.security.app_sg
 }
 
+module "cloudmap" {
+  source             = "../../modules/cloudmap"
+  environment        = var.environment
+  vpc_id             = module.network.vpc_id
+  namespace_name     = var.namespace_name
+  
+}
+
 module "ecs_vote" {
   source                = "../../modules/ecs_vote"
   environment           = var.environment
@@ -43,8 +52,9 @@ module "ecs_vote" {
   app_sg                = module.security.app_sg
   target_group_arn_vote = module.load_balancer.target_group_arn_vote
   vote_image            = var.vote_image
-  role_arn              = data.aws_iam_role.labrole.arn
+  role_arn              = module.role.execution_role_arn
   url_elasticache_redis = module.redis.url_redis
+  service_discovery_arn = module.cloudmap.redis_service_id
 }
 
 module "ecs_result" {
@@ -55,8 +65,9 @@ module "ecs_result" {
   cluster_id              = module.cluster.cluster_id
   target_group_arn_result = module.load_balancer.target_group_arn_result
   result_image            = var.result_image
-  role_arn                = data.aws_iam_role.labrole.arn
+  role_arn                = module.role.execution_role_arn
   url_postgres = module.postgres.url_postgres
+  service_discovery_arn   = module.cloudmap.result_service_id
 }
 
 module "ecs_worker" {
@@ -66,21 +77,34 @@ module "ecs_worker" {
   app_sg             = module.security.app_sg
   cluster_id         = module.cluster.cluster_id
   worker_image       = var.worker_image
-  role_arn           = data.aws_iam_role.labrole.arn
+  role_arn           = module.role.execution_role_arn
   db_endpoint        = module.postgres.url_postgres
   redis_endpoint     = module.redis.url_redis
+  service_discovery_arn = module.cloudmap.worker_service_id
 }
 
 module "redis" {
-  source             = "../../modules/redis"
+  source             = "../../modules/ecs_redis"
   environment        = var.environment
-  private_subnet_ids = module.network.private_subnet_ids
-  databases_sg       = module.security.databases_sg
+  subnet_ids         = module.network.private_subnet_ids
+  security_group_id  = module.security.databases_sg
+  redis_image        = var.redis_image
+  cluster_arn       = module.cluster.cluster_id
+  execution_role_arn = module.role.execution_role_arn
+  task_role_arn = module.role.execution_role_arn
+  redis_service_arn = module.cloudmap.redis_service_id
+
 }
 
 module "postgres" {
-  source             = "../../modules/postgres"
+  source             = "../../modules/ecs_postgres"
   environment        = var.environment
-  databases_sg       = module.security.databases_sg
-  private_subnet_ids = module.network.private_subnet_ids
+  subnet_ids         = module.network.private_subnet_ids
+  security_group_id  = module.security.databases_sg
+  postgres_image     = var.postgres_image
+  cluster_arn        = module.cluster.cluster_id
+  execution_role_arn = module.role.execution_role_arn
+  task_role_arn      = module.role.execution_role_arn
+  db_service_arn = module.cloudmap.result_service_id
+
 }

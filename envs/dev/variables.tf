@@ -40,6 +40,15 @@ variable "worker_image" {
   description = "La imagen del contenedor para la aplicacion de worker"
   type        = string
 }
+variable "postgres_image" {
+  description = "La imagen del contenedor para la base de datos Postgres"
+  type        = string
+}
+variable "redis_image" {
+  description = "La imagen del contenedor para Redis"
+  type        = string
+}
+
 variable "aws_region" {
   description = "La region de AWS donde se desplegara la infraestructura"
   type        = string
@@ -57,4 +66,9 @@ variable "aws_profile" {
   description = "El perfil de AWS a utilizar"
   type        = string
   default     = "default"
+}
+variable "namespace_name" {
+  description = "Nombre del namespace privado en Cloud Map"
+  type        = string
+  default     = "votingapp.local"
 }

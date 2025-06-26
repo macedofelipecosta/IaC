@@ -4,7 +4,7 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 resource "aws_ecs_service" "ecs_service_worker" {
-  name                   = "ecs_service_worker"
+  name                   = "worker"
   task_definition        = aws_ecs_task_definition.task_def_worker.arn
   cluster                = var.cluster_id
   desired_count          = 1
@@ -26,7 +26,7 @@ resource "aws_ecs_service" "ecs_service_worker" {
   network_configuration {
     subnets          = [for s in var.private_subnet_ids : s]
     security_groups  = [var.app_sg]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 }
 
@@ -44,14 +44,13 @@ resource "aws_ecs_task_definition" "task_def_worker" {
       "image" : var.worker_image,
       "cpu" : 256,
       "memory" : 512,
-      "networkMode" : "awsvpc",
       "interactive" : true,
       "pseudoTerminal" : true,
       "mountPoints" : [],
       environment = [
         {
           name  = "DB_HOST"
-          value = var.db_endpoint
+          value = "db"
         },
         {
           name  = "DB_PORT"
@@ -62,6 +61,7 @@ resource "aws_ecs_task_definition" "task_def_worker" {
           value = "votingapp_admin"
         },
         {
+          # amazonq-ignore-next-line
           name  = "DB_PASSWORD"
           value = "password"
         },
@@ -71,7 +71,7 @@ resource "aws_ecs_task_definition" "task_def_worker" {
         },
         {
           name  = "REDIS_HOST"
-          value = var.redis_endpoint
+          value = "redis"
         },
         {
           name  = "REDIS_PORT"
@@ -82,13 +82,11 @@ resource "aws_ecs_task_definition" "task_def_worker" {
           value = "us-east-1"
         }
       ]
-
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "secretOptions" : null,
         "options" : {
           "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
-          "awslogs-region" : "us-east-1",
           "awslogs-stream-prefix" : "worker"
         }
       }
