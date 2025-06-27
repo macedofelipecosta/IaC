@@ -1,0 +1,66 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    branches: [ "dev", "test", "main" ]
+    paths:
+      - 'envs/**'
+      - 'modules/**'
+  pull_request:
+    branches: [ "dev", "test", "main" ]
+    paths:
+      - 'envs/**'
+      - 'modules/**'
+
+jobs:
+  terraform:
+    name: Terraform ${{ github.ref_name }} CI/CD
+    runs-on: ubuntu-latest
+
+    env:
+      TF_IN_AUTOMATION: true
+      AWS_REGION: us-east-1  # Cambiar si usás otra región
+
+    defaults:
+      run:
+        working-directory: IaC/envs/${{ github.ref_name }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -var-file="terraform.tfvars"
+
+      - name: Terraform Apply (solo dev y test)
+        if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/test'
+        run: terraform apply -auto-approve -var-file="terraform.tfvars"
+
+      - name: Aprobación manual para producción
+        if: github.ref == 'refs/heads/main'
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: felipemacedo  # Cambiar por tu usuario
+          minimum-approvals: 1
+          issue-title: "Terraform Apply - Producción"
+          issue-body: "¿Aplicar cambios en el entorno de producción?"
+          
+
+      - name: Terraform Apply (solo main/prod)
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve -var-file="terraform.tfvars"
