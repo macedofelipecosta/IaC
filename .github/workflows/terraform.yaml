@@ -23,7 +23,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: IaC/envs/${{ github.ref_name }}
+        working-directory: envs/${{ github.ref_name }}
 
     steps:
       - name: Checkout code
