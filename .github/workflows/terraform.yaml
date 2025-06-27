@@ -11,7 +11,7 @@ on:
     paths:
       - 'envs/**'
       - 'modules/**'
-
+  workflow_dispatch:
 jobs:
   terraform:
     name: Terraform ${{ github.ref_name }} CI/CD
