@@ -45,48 +45,48 @@ resource "aws_ecs_task_definition" "task_def_vote" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
- container_definitions = jsonencode(
-  [
-    {
-      "name" : "vote_app",
-      "image" : var.vote_image,
-      "cpu" : 256,
-      "memory" : 512,
-      "interactive" : true,
-      "pseudoTerminal" : true,
-      "mountPoints" : [],
-      "portMappings" : [{
-        "containerPort" : 80,
-        "protocol" : "tcp"
-      }],
-      "environment" : [
-        {
-          "name" : "OPTION_A",
-          "value" : "Cats"
-        },
-        {
-          "name" : "OPTION_B",
-          "value" : "Dogs"
-        },
-        {
-          "name" : "REDIS_HOST",
-          "value" : var.redis_endpoint
-        },
-        {
-          "name" : "REDIS_PORT",
-          "value" : var.redis_port
-        }
-      ],
-      "logConfiguration" : {
-        "logDriver" : "awslogs",
-        "secretOptions" : null,
-        "options" : {
-          "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
-          "awslogs-region" : var.aws_region,
-          "awslogs-stream-prefix" : "vote"
+  container_definitions = jsonencode(
+    [
+      {
+        "name" : "vote_app",
+        "image" : var.vote_image,
+        "cpu" : 256,
+        "memory" : 512,
+        "interactive" : true,
+        "pseudoTerminal" : true,
+        "mountPoints" : [],
+        "portMappings" : [{
+          "containerPort" : 80,
+          "protocol" : "tcp"
+        }],
+        "environment" : [
+          {
+            "name" : "OPTION_A",
+            "value" : "Cats"
+          },
+          {
+            "name" : "OPTION_B",
+            "value" : "Dogs"
+          },
+          {
+            "name" : "REDIS_HOST",
+            "value" : var.redis_endpoint
+          },
+          {
+            "name" : "REDIS_PORT",
+            "value" : var.redis_port
+          }
+        ],
+        "logConfiguration" : {
+          "logDriver" : "awslogs",
+          "secretOptions" : null,
+          "options" : {
+            "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
+            "awslogs-region" : var.aws_region,
+            "awslogs-stream-prefix" : "vote"
+          }
         }
       }
-    }
-])
+  ])
 
 }
