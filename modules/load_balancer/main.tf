@@ -9,16 +9,16 @@ resource "aws_alb" "app_alb" {
 
 resource "aws_alb_target_group" "alb_vote_tg" {
   name        = "vote-tg"
-  port        = "80"
+  port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
   health_check {
     healthy_threshold   = "3"
-    interval            = "45"
+    interval            = "15"
     protocol            = "HTTP"
     matcher             = "200-404"
-    timeout             = "10"
+    timeout             = "5"
     path                = "/"
     unhealthy_threshold = "4"
   }
@@ -29,27 +29,24 @@ resource "aws_alb_listener" "http_listener" {
   port              = 80
   protocol          = "HTTP"
   default_action {
-    type             = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Not Found"
-      status_code  = "404"
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.alb_vote_tg.arn
   }
+
 }
 
 resource "aws_alb_target_group" "alb_result_tg" {
   name        = "result-tg"
-  port        = "80"
+  port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
   health_check {
     healthy_threshold   = "3"
-    interval            = "45"
+    interval            = "15"
     protocol            = "HTTP"
     matcher             = "200-404"
-    timeout             = "10"
+    timeout             = "5"
     path                = "/"
     unhealthy_threshold = "4"
   }

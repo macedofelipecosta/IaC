@@ -36,13 +36,6 @@ module "load_balancer" {
   app_sg_id          = module.security.app_sg
 }
 
-module "cloudmap" {
-  source         = "../../modules/cloudmap"
-  environment    = var.environment
-  vpc_id         = module.network.vpc_id
-  namespace_name = var.namespace_name
-
-}
 
 module "ecs_vote" {
   source                = "../../modules/ecs_vote"
@@ -54,6 +47,8 @@ module "ecs_vote" {
   vote_image            = var.vote_image
   role_arn              = module.role.execution_role_arn
   aws_region            = var.aws_region
+  redis_endpoint        = module.elasticache.redis_endpoint
+  redis_port            = module.elasticache.redis_port
   depends_on            = [module.load_balancer.aws_listener_http, module.load_balancer.target_group_arn_vote]
 }
 
@@ -67,8 +62,12 @@ module "ecs_result" {
   result_image            = var.result_image
   role_arn                = module.role.execution_role_arn
   aws_region              = var.aws_region
-  depends_on              = [module.load_balancer.aws_listener_http, module.load_balancer.target_group_arn_result]
+  postgres_endpoint       = module.rds_postgres.postgres_endpoint
+  postgres_db_name        = module.rds_postgres.postgres_db_name
+  depends_on              = [module.load_balancer.aws_listener_http, module.load_balancer.target_group_arn_result, module.ecs_worker]
 }
+
+
 
 module "ecs_worker" {
   source             = "../../modules/ecs_worker"
@@ -79,31 +78,24 @@ module "ecs_worker" {
   worker_image       = var.worker_image
   role_arn           = module.role.execution_role_arn
   aws_region         = var.aws_region
-  worker_service_registry_arn= module.cloudmap.worker_service_registry_arn
+  postgres_endpoint  = module.rds_postgres.postgres_endpoint
+  redis_endpoint     = module.elasticache.redis_endpoint
+  postgres_db_name   = module.rds_postgres.postgres_db_name
+  postgres_port      = module.rds_postgres.postgres_port
+  redis_port         = module.elasticache.redis_port
 }
 
-module "redis" {
-  source             = "../../modules/ecs_redis"
+module "elasticache" {
+  source             = "../../modules/elasticache_redis"
   environment        = var.environment
-  subnet_ids         = module.network.private_subnet_ids
-  security_group_id  = module.security.databases_sg
-  redis_image        = var.redis_image
-  cluster_arn        = module.cluster.cluster_id
-  execution_role_arn = module.role.execution_role_arn
-  task_role_arn      = module.role.execution_role_arn
-  redis_service_arn  = module.cloudmap.redis_service_id
-  region             = var.aws_region
+  private_subnet_ids = module.network.private_subnet_ids
+  redis_sg_id        = module.security.redis_sg
 }
 
-module "postgres" {
-  source             = "../../modules/ecs_postgres"
+module "rds_postgres" {
+  source             = "../../modules/rds_postgres"
   environment        = var.environment
-  subnet_ids         = module.network.private_subnet_ids
-  security_group_id  = module.security.databases_sg
-  postgres_image     = var.postgres_image
-  cluster_arn        = module.cluster.cluster_id
-  execution_role_arn = module.role.execution_role_arn
-  task_role_arn      = module.role.execution_role_arn
-  db_service_arn     = module.cloudmap.db_service_id
-  region             = var.aws_region
+  private_subnet_ids = module.network.private_subnet_ids
+  postgres_sg_id     = module.security.postgres_sg
 }
+

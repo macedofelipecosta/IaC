@@ -70,11 +70,11 @@ resource "aws_ecs_task_definition" "task_def_vote" {
         },
         {
           "name" : "REDIS_HOST",
-          "value" : "redis.votingapp.local"
+          "value" : var.redis_endpoint
         },
         {
           "name" : "REDIS_PORT",
-          "value" : "6379"
+          "value" : var.redis_port
         }
       ],
       "logConfiguration" : {

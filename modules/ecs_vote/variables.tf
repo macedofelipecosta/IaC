@@ -38,3 +38,12 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "redis_endpoint" {
+  description = "Redis endpoint"
+  type        = string
+}
+variable "redis_port" {
+  description = "Redis port"
+  type        = string
+  default     = "6379"
+}

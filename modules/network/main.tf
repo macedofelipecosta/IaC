@@ -32,10 +32,10 @@ resource "aws_subnet" "public_subnet" {
 resource "aws_subnet" "private_subnet" {
   count = length(var.private_subnets)
 
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[count.index]
-  availability_zone = var.availability_zones[count.index]
-
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.private_subnets[count.index]
+  availability_zone       = var.availability_zones[count.index]
+  map_public_ip_on_launch = false
   tags = {
     Name        = "${var.vpc_name}-private-${count.index + 1}"
     environment = var.environment
@@ -47,7 +47,7 @@ resource "aws_nat_gateway" "nat_gw" {
 
   allocation_id = aws_eip.nat_eip[count.index].id #Se asocia una EIP a cada NAT Gateway
   #allocation_id = aws_eip.nat_eip.id #Se asocia una EIP a cada NAT Gateway
-  subnet_id     = aws_subnet.public_subnet[count.index].id
+  subnet_id = aws_subnet.public_subnet[count.index].id
   #subnet_id = aws_subnet.public_subnet[0].id
 
   tags = {
@@ -105,7 +105,7 @@ resource "aws_route" "private_route" {
   route_table_id         = aws_route_table.private_route_table[count.index].id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat_gw[0].id
-  
+
 }
 
 resource "aws_route_table_association" "private_subnet_association" {

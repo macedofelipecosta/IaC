@@ -33,7 +33,25 @@ variable "aws_region" {
   type        = string
   default     = "us-east-1"
 }
-variable "worker_service_registry_arn" {
-  description = "ARN del servicio de registro para el worker"
-  type        = string  
+variable "redis_endpoint" {
+  description = "Redis endpoint"
+  type        = string
+}
+variable "postgres_endpoint" {
+  description = "Postgres endpoint"
+  type        = string
+}
+variable "postgres_db_name" {
+  description = "Postgres database name"
+  type        = string
+}
+variable "postgres_port" {
+  description = "Postgres port"
+  type        = string
+  default     = "5432"
+}
+variable "redis_port" {
+  description = "Redis port"
+  type        = string
+  default     = "6379"
 }

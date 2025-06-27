@@ -29,10 +29,6 @@ resource "aws_ecs_service" "ecs_service_worker" {
     assign_public_ip = false
   }
 
-    service_registries {
-    registry_arn   = var.worker_service_registry_arn
-    container_name = "worker_app"
-  }
 }
 
 resource "aws_ecs_task_definition" "task_def_worker" {
@@ -53,13 +49,13 @@ resource "aws_ecs_task_definition" "task_def_worker" {
       "pseudoTerminal" : true,
       "mountPoints" : [],
       "environment" : [
-        { "name" = "DB_HOST", "value" = "db.votingapp.local" },
+        { "name" = "DB_HOST", "value" = var.postgres_endpoint },
         { "name" = "DB_USER", "value" = "postgres" },
         { "name" = "DB_PASSWORD", "value" = "postgres" },
-        { "name" = "DB_NAME", "value" = "postgres" },
-        { "name" = "REDIS_HOST", "value" = "redis.votingapp.local" },
-        { "name" = "DB_PORT", "value" = "5432" },
-        { "name" = "REDIS_PORT", "value" = "6379" }
+        { "name" = "DB_NAME", "value" = var.postgres_db_name },
+        { "name" = "REDIS_HOST", "value" = var.redis_endpoint },
+        { "name" = "DB_PORT", "value" = var.postgres_port },
+        { "name" = "REDIS_PORT", "value" = var.redis_port }
 
       ],
       "logConfiguration" : {

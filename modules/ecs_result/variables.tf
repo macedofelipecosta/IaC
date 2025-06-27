@@ -43,3 +43,12 @@ variable "aws_region" {
   type        = string
   default     = "us-east-1"
 }
+variable "postgres_endpoint" {
+  description = "Postgres endpoint"
+  type        = string
+}
+variable "postgres_db_name" {
+  description = "Postgres database name"
+  type        = string
+  default     = "postgres"
+}

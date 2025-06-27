@@ -8,16 +8,37 @@ resource "aws_security_group" "app_sg" {
   description = "Se implementa un sg para las app vote y result para los puertos 5000, 5001, 5858, 80 "
   vpc_id      = var.vpc_id
 
-  dynamic "ingress" {
-    for_each = local.app_ports
-    content {
-      description      = "Se implementa un sg para las app vote y result para los puertos 5000, 5001, 5858, 80 "
-      from_port        = ingress.value
-      to_port          = element(local.app_ports, index(local.app_ports, ingress.value))
-      protocol         = "tcp"
-      cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = ["::/0"]
-    }
+  ingress {
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+
+  }
+  ingress {
+    from_port        = 5000
+    to_port          = 5000
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+
+  }
+  ingress {
+    from_port        = 5001
+    to_port          = 5001
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+
+  }
+  ingress {
+    from_port        = 5858
+    to_port          = 5858
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+
   }
 
   egress {
@@ -34,32 +55,45 @@ resource "aws_security_group" "app_sg" {
   }
 }
 
-resource "aws_security_group" "databases_sg" {
-  name        = "${var.environment}-db_sg"
-  description = "Se utiliza un sg para ambas db con los puertos 6379 y 5432"
+
+resource "aws_security_group" "rds_sg" {
+  name        = "${var.environment}-rds-sg"
+  description = "Allow PostgreSQL access from ECS"
   vpc_id      = var.vpc_id
 
-  dynamic "ingress" {
-    for_each = local.db_ports
-    content {
-      description     = "Se utiliza un sg para ambas db con los puertos 6379 y 5432"
-      from_port       = ingress.value
-      to_port         = element(local.db_ports, index(local.db_ports, ingress.value))
-      protocol        = "tcp"
-      security_groups = [aws_security_group.app_sg.id]
-    }
+  ingress {
+    description     = "PostgreSQL from ECS"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.app_sg.id]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "redis_sg" {
+  name        = "${var.environment}-redis-sg"
+  description = "Allow Redis access from ECS"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description     = "Redis from ECS"
+    from_port       = 6379
+    to_port         = 6379
+    protocol        = "tcp"
+    security_groups = [aws_security_group.app_sg.id]
   }
 
-  tags = {
-    Name= "${var.environment}-db_sg"
-    environment = var.environment
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }

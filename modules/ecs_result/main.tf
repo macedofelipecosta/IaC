@@ -32,7 +32,7 @@ resource "aws_ecs_service" "ecs_service_result" {
   load_balancer {
     target_group_arn = var.target_group_arn_result
     container_name   = "result_app"
-    container_port   = "80"
+    container_port   = 80
   }
   tags = {
     Name        = "ecs_service_result"
@@ -59,10 +59,10 @@ resource "aws_ecs_task_definition" "task_def_result" {
     "pseudoTerminal" : true,
     "mountPoints" : [],
     "environment" : [
-      { "name" : "DB_HOST", "value" : "db.votingapp.local" },
+      { "name" : "DB_HOST", "value" : var.postgres_endpoint },
       { "name" : "DB_USER", "value" : "postgres" },
       { "name" : "DB_PASSWORD", "value" : "postgres" },
-      { "name" : "DB_NAME", "value" : "postgres" }
+      { "name" : "DB_NAME", "value" : var.postgres_db_name }
     ],
     "logConfiguration" : {
       "logDriver" : "awslogs",

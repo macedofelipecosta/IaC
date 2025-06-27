@@ -21,8 +21,7 @@ cluster_name = "voting-cluster-dev"
 vote_image     = "fmacedocosta/vote-app:latest"
 result_image   = "fmacedocosta/result-app:latest"
 worker_image   = "fmacedocosta/worker-app:latest"
-postgres_image = "fmacedocosta/postgres-app:latest"
-redis_image    = "fmacedocosta/redis-app:latest"
+
 
 capacity_providers = ["FARGATE", "FARGATE_SPOT"]
 
