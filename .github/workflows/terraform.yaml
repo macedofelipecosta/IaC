@@ -60,7 +60,7 @@ jobs:
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: felipemacedo  # Cambiar por tu usuario
+          approvers: macedofelipecosta  # Cambiar por el usuario que debe aprobar
           minimum-approvals: 1
           issue-title: "Terraform Apply - Producción"
           issue-body: "¿Aplicar cambios en el entorno de producción?"
