@@ -24,9 +24,14 @@ resource "aws_ecs_service" "ecs_service_worker" {
   }
 
   network_configuration {
-    subnets          = [for s in var.private_subnet_ids : s]
+    subnets          = [for s in var.private_subnets_id : s]
     security_groups  = [var.app_sg]
     assign_public_ip = false
+  }
+
+    service_registries {
+    registry_arn   = var.worker_service_registry_arn
+    container_name = "worker_app"
   }
 }
 
@@ -47,47 +52,22 @@ resource "aws_ecs_task_definition" "task_def_worker" {
       "interactive" : true,
       "pseudoTerminal" : true,
       "mountPoints" : [],
-      # environment = [
-      #   {
-      #     name  = "DB_HOST"
-      #     value = "db.votingapp.local"
-      #   },
-      #   {
-      #     name  = "DB_PORT"
-      #     value = "5432"
-      #   },
-      #   {
-      #     name  = "DB_USER"
-      #     value = "postgres"
-      #   },
-      #   {
-      #     # amazonq-ignore-next-line
-      #     name  = "DB_PASSWORD"
-      #     value = "postgres"
-      #   },
-      #   {
-      #     name  = "DB_NAME"
-      #     value = "postgres"
-      #   },
-      #   {
-      #     name  = "REDIS_HOST"
-      #     value = "redis.votingapp.local"
-      #   },
-      #   {
-      #     name  = "REDIS_PORT"
-      #     value = "6379"
-      #   },
-      #   {
-      #     name  = "AWS_REGION"
-      #     value = "us-east-1"
-      #   }
-      # ]
+      "environment" : [
+        { "name" = "DB_HOST", "value" = "db.votingapp.local" },
+        { "name" = "DB_USER", "value" = "postgres" },
+        { "name" = "DB_PASSWORD", "value" = "postgres" },
+        { "name" = "DB_NAME", "value" = "postgres" },
+        { "name" = "REDIS_HOST", "value" = "redis.votingapp.local" },
+        { "name" = "DB_PORT", "value" = "5432" },
+        { "name" = "REDIS_PORT", "value" = "6379" }
+
+      ],
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "secretOptions" : null,
         "options" : {
           "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
-          "awslogs-stream-prefix" : "worker"
+          "awslogs-stream-prefix" : "worker",
           "awslogs-region" : var.aws_region
         }
       }

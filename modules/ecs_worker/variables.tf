@@ -10,7 +10,7 @@ variable "cluster_id" {
   description = "ECS cluster ID"
   type        = string
 }
-variable "private_subnet_ids" {
+variable "private_subnets_id" {
   description = "Private subnets IDs"
   type        = list(string)
 }
@@ -32,4 +32,8 @@ variable "aws_region" {
   description = "AWS region for logging"
   type        = string
   default     = "us-east-1"
+}
+variable "worker_service_registry_arn" {
+  description = "ARN del servicio de registro para el worker"
+  type        = string  
 }

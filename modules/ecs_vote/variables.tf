@@ -14,7 +14,7 @@ variable "cluster_id" {
   description = "ECS cluster ID"
   type        = string
 }
-variable "private_subnet_ids" {
+variable "private_subnets_id" {
   description = "Private subnets IDs"
   type        = list(string)
 }

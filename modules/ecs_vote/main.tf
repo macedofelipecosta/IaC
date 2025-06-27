@@ -24,7 +24,7 @@ resource "aws_ecs_service" "ecs_service_vote" {
   }
 
   network_configuration {
-    subnets          = [for s in var.private_subnet_ids : s]
+    subnets          = [for s in var.private_subnets_id : s]
     security_groups  = [var.app_sg]
     assign_public_ip = false
   }
@@ -45,40 +45,48 @@ resource "aws_ecs_task_definition" "task_def_vote" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
-  container_definitions = jsonencode(
-    [
-      {
-        "name" : "vote_app",
-        "image" : var.vote_image,
-        "cpu" : 256,
-        "memory" : 512,
-        "interactive" : true,
-        "pseudoTerminal" : true,
-        "mountPoints" : [],
-        "portMappings" : [{
-          "containerPort" : 80,
-          "hostPort" : 80,
-          "protocol" : "tcp"
-        }],
-        # "environment" : [
-        #   {
-        #     "name" : "REDIS_HOST",
-        #     "value" : "redis.votingapp.local"
-        #   },
-        #   {
-        #     "name" : "REDIS_PORT",
-        #     "value" : "6379"
-        #   }
-        # ],
-        "logConfiguration" : {
-          "logDriver" : "awslogs",
-          "secretOptions" : null,
-          "options" : {
-            "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
-            "awslogs-region" : var.aws_region,
-            "awslogs-stream-prefix" : "vote"
-          }
+ container_definitions = jsonencode(
+  [
+    {
+      "name" : "vote_app",
+      "image" : var.vote_image,
+      "cpu" : 256,
+      "memory" : 512,
+      "interactive" : true,
+      "pseudoTerminal" : true,
+      "mountPoints" : [],
+      "portMappings" : [{
+        "containerPort" : 80,
+        "protocol" : "tcp"
+      }],
+      "environment" : [
+        {
+          "name" : "OPTION_A",
+          "value" : "Cats"
+        },
+        {
+          "name" : "OPTION_B",
+          "value" : "Dogs"
+        },
+        {
+          "name" : "REDIS_HOST",
+          "value" : "redis.votingapp.local"
+        },
+        {
+          "name" : "REDIS_PORT",
+          "value" : "6379"
+        }
+      ],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "secretOptions" : null,
+        "options" : {
+          "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
+          "awslogs-region" : var.aws_region,
+          "awslogs-stream-prefix" : "vote"
         }
       }
-  ])
+    }
+])
+
 }

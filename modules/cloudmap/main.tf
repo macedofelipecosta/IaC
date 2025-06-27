@@ -40,3 +40,21 @@ resource "aws_service_discovery_service" "db" {
     environment = var.environment
   }
 }
+resource "aws_service_discovery_service" "worker" {
+  name = "worker"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.voting.id
+
+    dns_records {
+      type = "A"
+      ttl  = 10
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  tags = {
+    environment = var.environment
+  }
+}

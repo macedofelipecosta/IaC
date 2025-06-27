@@ -47,7 +47,7 @@ module "cloudmap" {
 module "ecs_vote" {
   source                = "../../modules/ecs_vote"
   environment           = var.environment
-  private_subnet_ids    = module.network.private_subnet_ids
+  private_subnets_id    = module.network.private_subnet_ids
   cluster_id            = module.cluster.cluster_id
   app_sg                = module.security.app_sg
   target_group_arn_vote = module.load_balancer.target_group_arn_vote
@@ -73,12 +73,13 @@ module "ecs_result" {
 module "ecs_worker" {
   source             = "../../modules/ecs_worker"
   environment        = var.environment
-  private_subnet_ids = module.network.private_subnet_ids
+  private_subnets_id = module.network.private_subnet_ids
   app_sg             = module.security.app_sg
   cluster_id         = module.cluster.cluster_id
   worker_image       = var.worker_image
   role_arn           = module.role.execution_role_arn
   aws_region         = var.aws_region
+  worker_service_registry_arn= module.cloudmap.worker_service_registry_arn
 }
 
 module "redis" {

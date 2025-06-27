@@ -49,57 +49,41 @@ resource "aws_ecs_task_definition" "task_def_result" {
   cpu                      = "256"
   memory                   = "512"
   container_definitions = jsonencode([
-    {
-      # amazonq-ignore-next-line
-      "name" : "result_app",
-      "image" : var.result_image,
-      "cpu" : 256,
-      "memory" : 512,
-      "networkMode" : "awsvpc",
-      "interactive" : true,
-      "pseudoTerminal" : true,
-      "mountPoints" : [],
-      # "environment" : [
-      #   {
-      #     "name" : "DB_HOST",
-      #     "value" : "db.votingapp.local"
-      #   },
-      #   {
-      #     "name" : "DB_PORT",
-      #     "value" : "5432"
-      #   },
-      #   {
-      #     # amazonq-ignore-next-line
-      #     "name" : "DB_USER",
-      #     "value" : "postgres"
-      #   },
-      #   {
-      #     "name" : "DB_PASSWORD",
-      #     "value" : "postgres"
-      #   },
-      #   {
-      #     "name" : "DB_NAME",
-      #     "value" : "postgres"
-      #   }
-      # ],
-      "logConfiguration" : {
-        "logDriver" : "awslogs",
-        "secretOptions" : null,
-        "options" : {
-          "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
-          "awslogs-region" : var.aws_region,
-          "awslogs-stream-prefix" : "result"
-        }
-      },
-      "portMappings" : [{
+  {
+    "name" : "result_app",
+    "image" : var.result_image,
+    "cpu" : 256,
+    "memory" : 512,
+    "networkMode" : "awsvpc",
+    "interactive" : true,
+    "pseudoTerminal" : true,
+    "mountPoints" : [],
+    "environment" : [
+      { "name" : "DB_HOST", "value" : "db.votingapp.local" },
+      { "name" : "DB_USER", "value" : "postgres" },
+      { "name" : "DB_PASSWORD", "value" : "postgres" },
+      { "name" : "DB_NAME", "value" : "postgres" }
+    ],
+    "logConfiguration" : {
+      "logDriver" : "awslogs",
+      "secretOptions" : null,
+      "options" : {
+        "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
+        "awslogs-region" : var.aws_region,
+        "awslogs-stream-prefix" : "result"
+      }
+    },
+    "portMappings" : [
+      {
         "containerPort" : 80,
-        "hostPort" : 80,
         "protocol" : "tcp"
-        },
-        {
-          "containerPort" : 5858,
-          "hostPort" : 5858
-      }]
-    }
-  ])
+      },
+      {
+        "containerPort" : 5858,
+        "protocol" : "tcp"
+      }
+    ]
+  }
+])
+
 }
