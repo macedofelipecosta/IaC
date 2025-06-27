@@ -12,6 +12,9 @@ on:
       - 'envs/**'
       - 'modules/**'
   workflow_dispatch:
+permissions:
+ contents: 'read'
+ issues: 'write' 
 jobs:
   terraform:
     name: Terraform ${{ github.ref_name }} CI/CD
