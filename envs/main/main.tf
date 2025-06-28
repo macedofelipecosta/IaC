@@ -1,6 +1,5 @@
-module "role" {
-  source      = "../../modules/iam"
-  environment = var.environment
+data "aws_iam_role" "labrole" {
+  name = "LabRole"  # Asegurate de usar el nombre exacto del rol
 }
 
 module "cluster" {
@@ -45,7 +44,7 @@ module "ecs_vote" {
   app_sg                = module.security.app_sg
   target_group_arn_vote = module.load_balancer.target_group_arn_vote
   vote_image            = var.vote_image
-  role_arn              = module.role.execution_role_arn
+  role_arn              = data.aws_iam_role.labrole.arn
   aws_region            = var.aws_region
   redis_endpoint        = module.elasticache.redis_endpoint
   redis_port            = module.elasticache.redis_port
@@ -60,7 +59,7 @@ module "ecs_result" {
   cluster_id              = module.cluster.cluster_id
   target_group_arn_result = module.load_balancer.target_group_arn_result
   result_image            = var.result_image
-  role_arn                = module.role.execution_role_arn
+  role_arn                = data.aws_iam_role.labrole.arn
   aws_region              = var.aws_region
   postgres_endpoint       = module.rds_postgres.postgres_endpoint
   postgres_db_name        = module.rds_postgres.postgres_db_name
@@ -76,7 +75,7 @@ module "ecs_worker" {
   app_sg             = module.security.app_sg
   cluster_id         = module.cluster.cluster_id
   worker_image       = var.worker_image
-  role_arn           = module.role.execution_role_arn
+  role_arn           = data.aws_iam_role.labrole.arn
   aws_region         = var.aws_region
   postgres_endpoint  = module.rds_postgres.postgres_endpoint
   redis_endpoint     = module.elasticache.redis_endpoint
