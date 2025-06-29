@@ -1,4 +1,4 @@
-#Configuracion de variables para el entorno de desarrollo
+#Configuracion de variables para el entorno de main
 environment = "main"
 aws_region  = "us-east-1"
 vpc_name    = "voting-vpc-main"
