@@ -55,3 +55,12 @@ variable "redis_port" {
   type        = string
   default     = "6379"
 }
+variable "rds_sg" {
+  description = "RDS security group ID"
+  type        = string
+}
+
+variable "redis_sg" {
+  description = "Redis security group ID"
+  type        = string
+}

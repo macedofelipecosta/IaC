@@ -12,7 +12,7 @@ resource "aws_elasticache_replication_group" "this" {
   automatic_failover_enabled = false
   port                       = 6379
   subnet_group_name          = aws_elasticache_subnet_group.this.name
-  security_group_ids         = [var.redis_sg_id]
+  security_group_ids         = [var.redis_sg_id, var.app_sg_id]
 
   tags = {
     Environment = var.environment

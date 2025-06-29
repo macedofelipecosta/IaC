@@ -61,14 +61,6 @@ resource "aws_ecs_task_definition" "task_def_vote" {
         }],
         "environment" : [
           {
-            "name" : "OPTION_A",
-            "value" : "Cats"
-          },
-          {
-            "name" : "OPTION_B",
-            "value" : "Dogs"
-          },
-          {
             "name" : "REDIS_HOST",
             "value" : var.redis_endpoint
           },

@@ -18,9 +18,9 @@ resource "aws_db_instance" "this" {
   password               = var.password
   db_name                = var.db_name
   port                   = 5432
-  publicly_accessible    = false
+  publicly_accessible    = true
   skip_final_snapshot    = true
-  vpc_security_group_ids = [var.postgres_sg_id]
+  vpc_security_group_ids = [var.postgres_sg_id, var.app_sg_id]
   db_subnet_group_name   = aws_db_subnet_group.this.name
 
   tags = {

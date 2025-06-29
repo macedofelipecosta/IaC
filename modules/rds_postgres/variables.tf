@@ -49,3 +49,8 @@ variable "db_name" {
   default     = "votedb"
   description = "Initial database name"
 }
+
+variable "app_sg_id" {
+  type        = string
+  description = "Security group ID for the application that needs to access the RDS instance"
+}

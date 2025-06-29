@@ -50,5 +50,4 @@ variable "postgres_endpoint" {
 variable "postgres_db_name" {
   description = "Postgres database name"
   type        = string
-  default     = "postgres"
 }

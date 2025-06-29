@@ -6,6 +6,13 @@ resource "aws_alb" "app_alb" {
   security_groups = [var.app_sg_id]
 }
 
+resource "aws_alb" "result_alb" {
+  name            = "result-voting-alb"
+  internal        = false
+  subnets         = var.public_subnets_id
+  security_groups = [var.app_sg_id]  # puede ser el mismo SG o uno separado
+}
+
 
 resource "aws_alb_target_group" "alb_vote_tg" {
   name        = "vote-tg"
@@ -24,7 +31,7 @@ resource "aws_alb_target_group" "alb_vote_tg" {
   }
 }
 
-resource "aws_alb_listener" "http_listener" {
+resource "aws_alb_listener" "vote_listener" {
   load_balancer_arn = aws_alb.app_alb.arn
   port              = 80
   protocol          = "HTTP"
@@ -34,6 +41,18 @@ resource "aws_alb_listener" "http_listener" {
   }
 
 }
+
+resource "aws_alb_listener" "result_listener" {
+  load_balancer_arn = aws_alb.result_alb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.alb_result_tg.arn
+  }
+}
+
 
 resource "aws_alb_target_group" "alb_result_tg" {
   name        = "result-tg"
@@ -52,37 +71,6 @@ resource "aws_alb_target_group" "alb_result_tg" {
   }
 }
 
-resource "aws_alb_listener_rule" "vote_rule" {
-  listener_arn = aws_alb_listener.http_listener.arn
-  priority     = 10
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_alb_target_group.alb_vote_tg.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/"]
-    }
-  }
-}
-
-resource "aws_alb_listener_rule" "result_rule" {
-  listener_arn = aws_alb_listener.http_listener.arn
-  priority     = 20
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_alb_target_group.alb_result_tg.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/result*"]
-    }
-  }
-}
 
 
 

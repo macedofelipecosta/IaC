@@ -59,8 +59,4 @@ variable "aws_profile" {
   type        = string
   default     = "default"
 }
-variable "namespace_name" {
-  description = "Nombre del namespace privado en Cloud Map"
-  type        = string
-  default     = "votingapp.local"
-}
+
