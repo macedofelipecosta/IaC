@@ -24,3 +24,7 @@ variable "engine_version" {
   default     = "7.0"
   description = "Redis engine version"
 }
+variable "app_sg_id" {
+  type        = string
+  description = "Security Group ID for the application that needs to access the Redis instance"
+}

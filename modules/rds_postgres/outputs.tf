@@ -12,3 +12,15 @@ output "postgres_db_name" {
   value       = aws_db_instance.this.db_name
   description = "Database name"
 }
+
+output "postgres_instance_id"{
+  value       = aws_db_instance.this.id
+  description = "ID of the PostgreSQL RDS instance"
+
+}
+
+output "postgres_instance_arn" {
+  value       = aws_db_instance.this.arn
+  description = "ARN of the PostgreSQL RDS instance"
+}
+

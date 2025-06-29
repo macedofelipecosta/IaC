@@ -49,41 +49,41 @@ resource "aws_ecs_task_definition" "task_def_result" {
   cpu                      = "256"
   memory                   = "512"
   container_definitions = jsonencode([
-  {
-    "name" : "result_app",
-    "image" : var.result_image,
-    "cpu" : 256,
-    "memory" : 512,
-    "networkMode" : "awsvpc",
-    "interactive" : true,
-    "pseudoTerminal" : true,
-    "mountPoints" : [],
-    "environment" : [
-      { "name" : "DB_HOST", "value" : var.postgres_endpoint },
-      { "name" : "DB_USER", "value" : "postgres" },
-      { "name" : "DB_PASSWORD", "value" : "postgres" },
-      { "name" : "DB_NAME", "value" : var.postgres_db_name }
-    ],
-    "logConfiguration" : {
-      "logDriver" : "awslogs",
-      "secretOptions" : null,
-      "options" : {
-        "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
-        "awslogs-region" : var.aws_region,
-        "awslogs-stream-prefix" : "result"
-      }
-    },
-    "portMappings" : [
-      {
-        "containerPort" : 80,
-        "protocol" : "tcp"
+    {
+      "name" : "result_app",
+      "image" : var.result_image,
+      "cpu" : 256,
+      "memory" : 512,
+      "networkMode" : "awsvpc",
+      "interactive" : true,
+      "pseudoTerminal" : true,
+      "mountPoints" : [],
+      "environment" : [
+        { "name" : "DB_HOST", "value" : var.postgres_endpoint },
+        { "name" : "DB_USER", "value" : "postgres" },
+        { "name" : "DB_PASSWORD", "value" : "postgres" },
+        { "name" : "DB_NAME", "value" : var.postgres_db_name }
+      ],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "secretOptions" : null,
+        "options" : {
+          "awslogs-group" : "${aws_cloudwatch_log_group.this.name}",
+          "awslogs-region" : var.aws_region,
+          "awslogs-stream-prefix" : "result"
+        }
       },
-      {
-        "containerPort" : 5858,
-        "protocol" : "tcp"
-      }
-    ]
-  }
-])
+      "portMappings" : [
+        {
+          "containerPort" : 80,
+          "protocol" : "tcp"
+        },
+        {
+          "containerPort" : 5858,
+          "protocol" : "tcp"
+        }
+      ]
+    }
+  ])
 
 }

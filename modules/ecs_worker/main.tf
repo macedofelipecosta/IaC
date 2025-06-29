@@ -25,7 +25,7 @@ resource "aws_ecs_service" "ecs_service_worker" {
 
   network_configuration {
     subnets          = [for s in var.private_subnets_id : s]
-    security_groups  = [var.app_sg]
+    security_groups  = [var.app_sg, var.rds_sg, var.redis_sg]
     assign_public_ip = false
   }
 
@@ -53,8 +53,8 @@ resource "aws_ecs_task_definition" "task_def_worker" {
         { "name" = "DB_USER", "value" = "postgres" },
         { "name" = "DB_PASSWORD", "value" = "postgres" },
         { "name" = "DB_NAME", "value" = var.postgres_db_name },
-        { "name" = "REDIS_HOST", "value" = var.redis_endpoint },
         { "name" = "DB_PORT", "value" = var.postgres_port },
+        { "name" = "REDIS_HOST", "value" = var.redis_endpoint },
         { "name" = "REDIS_PORT", "value" = var.redis_port }
 
       ],

@@ -18,7 +18,12 @@ variable "redis_cluster_id" {
   description = "ID del cluster de Redis (ElastiCache)"
 }
 
-variable "alb_name" {
+variable "alb_result_name" {
+  type        = string
+  description = "Nombre del ALB en formato arn:aws:elasticloadbalancing:region:xxx:loadbalancer/app/..."
+}
+
+variable "alb_vote_name" {
   type        = string
   description = "Nombre del ALB en formato arn:aws:elasticloadbalancing:region:xxx:loadbalancer/app/..."
 }

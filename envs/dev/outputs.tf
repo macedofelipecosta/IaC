@@ -1,9 +1,12 @@
 
-output "alb_dns" {
+output "alb_vote_dns" {
   description = "DNS del Application Load Balancer"
   value       = module.load_balancer.alb_app_dns
 }
-
+output "alb_result_dns" {
+  description = "DNS del Application Load Balancer para la app Result"
+  value       = module.load_balancer.alb_result_dns
+}
 
 output "alb_target_group_arn_vote" {
   description = "ARN del Target Group vote asociado al ALB"
@@ -48,3 +51,17 @@ output "subnet_ids" {
   value       = module.network.private_subnet_ids
 }
 
+output "dashboard_url" {
+  value = module.cloudwatch.dashboard_url
+}
+
+output "db_name" {
+  description = "Nombre de la base de datos RDS"
+  value       = module.rds_postgres.postgres_db_name
+}
+
+output "postgres_endpoint" {
+  value       = module.rds_postgres.postgres_endpoint
+  description = "Endpoint de la instancia RDS PostgreSQL"
+  
+}

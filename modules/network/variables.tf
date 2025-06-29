@@ -1,28 +1,28 @@
-variable "environment"{
+variable "environment" {
   description = "Ambiente donde se está ejecutando el IaC"
-  type = string
+  type        = string
 }
-variable "vpc_name"{
+variable "vpc_name" {
   description = "Nombre de la vpc"
-  type = string
+  type        = string
 }
 
-variable "public_subnets"{
+variable "public_subnets" {
   description = "Lista de Subnets publicas"
-  type = list(string)
+  type        = list(string)
 }
 
-variable "private_subnets"{
+variable "private_subnets" {
   description = "Lista de Subnets privadas"
-  type = list(string)
+  type        = list(string)
 }
 
-variable "availability_zones"{
+variable "availability_zones" {
   description = "Zonas de disponibilidad"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "vpc_cidr_block" {
   description = "CIDR del VPC"
-  type = string
+  type        = string
 }

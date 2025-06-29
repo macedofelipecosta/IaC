@@ -26,7 +26,16 @@ resource "aws_cloudwatch_dashboard" "main" {
         x = 0, y = 6, width = 12, height = 6,
         properties = {
           title = "Latency - ALB",
-          metrics = [[ "AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", var.alb_name ]],
+          metrics = [[ "AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", var.alb_vote_name ]],
+          stat = "Average", period = 300, view = "timeSeries", region = var.aws_region
+        }
+      },
+      {
+        type = "metric",
+        x = 0, y = 6, width = 12, height = 6,
+        properties = {
+          title = "Latency - ALB",
+          metrics = [[ "AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", var.alb_result_name ]],
           stat = "Average", period = 300, view = "timeSeries", region = var.aws_region
         }
       },
@@ -73,12 +82,13 @@ resource "aws_cloudwatch_metric_alarm" "alb_5xx" {
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "HTTPCode_Target_5XX_Count"
-  namespace           = "AWS/ApplicationELB"
+  namespace           = "AWS/ApplicationALB"
   period              = 60
   statistic           = "Sum"
   threshold           = 5
   alarm_description   = "ALB is returning too many 5XX errors"
   dimensions = {
-    LoadBalancer = var.alb_name
+    LoadBalancer = var.alb_result_name
+    LoadBalancerArn = var.alb_vote_name
   }
 }
