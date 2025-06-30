@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: "Entorno a desplegar (dev, test, main)"
+        description: "Entorno a desplegar (main)"
         required: true
         default: "main"
 permissions:
@@ -55,7 +55,7 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -var-file="terraform.tfvars"
-
+        
       - name: Terraform Apply (solo dev y test)
         if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/test'
         run: terraform apply -auto-approve -var-file="terraform.tfvars"
